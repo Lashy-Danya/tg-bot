@@ -1,16 +1,20 @@
-from aiogram import Bot, types
-from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
+from create_bot import dp
+from handlers import client
 
-import os
+import logging
 
-bot = Bot(token=os.getenv('TOKEN'))
-dp = Dispatcher(bot)
+# logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
+async def on_startup(_):
+    print("Бот в онлайне")
 
-@dp.message_handler()
-async def echo(message : types.Message):
-    await message.answer(message.text)
+client.handlers_client(dp)
 
+# @dp.message_handler()
+# async def echo(message : types.Message):
+#     await message.answer(message.text)
 
-executor.start_polling(dp, skip_updates=True)
+if __name__ == "__main__":
+    executor.start_polling(dp, skip_updates = True, on_startup = on_startup)
